@@ -184,6 +184,7 @@ function App() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState(
     initialSession?.user || null
@@ -512,12 +513,12 @@ function App() {
             }}
             aria-label="ARTFIT home"
           >
-            <span className="auth-brand-icon">A</span>
             <span className="auth-brand-name">
               ART<span>FIT</span>
-              <small>ART FOR YOUR SPACE</small>
+              <small>Smart Painting Discovery and Selling Platform</small>
             </span>
           </button>
+            
 
           <div className="auth-nav-right">
             <span>{isArtist ? "Artist Studio" : "Discover Original Art"}</span>
@@ -632,16 +633,29 @@ function App() {
                     <span>{isLogin ? "Secure account" : "Min 6 characters"}</span>
                   </div>
 
-                  <input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    autoComplete={isLogin ? "current-password" : "new-password"}
-                    minLength={6}
-                    required
-                  />
+                  
+<div className="password-input-wrap">
+  <input
+    id="password"
+    type={showPassword ? "text" : "password"}
+    placeholder="••••••••"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    autoComplete={isLogin ? "current-password" : "new-password"}
+    minLength={6}
+    required
+  />
+
+  <button
+    type="button"
+    className="password-toggle"
+    onClick={() => setShowPassword((prev) => !prev)}
+    aria-label={showPassword ? "Hide password" : "Show password"}
+  >
+    {showPassword ? "🙈" : "👁️"}
+  </button>
+</div>
+
                 </div>
 
                 <button
