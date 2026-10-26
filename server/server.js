@@ -35,6 +35,34 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// Connect to MongoDB before handling API requests
+let dbConnectionPromise;
+
+async function connectDB() {
+  if (mongoose.connection.readyState === 1) return;
+
+  if (!dbConnectionPromise) {
+    dbConnectionPromise = mongoose.connect(MONGO_URI).catch((error) => {
+      dbConnectionPromise = null;
+      throw error;
+    });
+  }
+
+  await dbConnectionPromise;
+}
+
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error("MongoDB connection failed:", error.message);
+    res.status(503).json({
+      status: "error",
+      message: "Database connection failed",
+    });
+  }
+});
 
 // Request logging
 app.use((req, res, next) => {
